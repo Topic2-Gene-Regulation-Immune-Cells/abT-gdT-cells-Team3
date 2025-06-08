@@ -1,4 +1,6 @@
-who_this = 'Laila'
+def set_user(user):
+    global who_this
+    who_this = user
 
 # import of packages
 import pandas as pd
@@ -17,11 +19,11 @@ if who_this == "Laila":
     Cell_population_qc_path = "/Users/laila/github/bioinfo25/Raw_data/cell-populations_qc-matrices_mmc1.xlsx"
     Voluntary_path = "/Users/laila/github/bioinfo25/Raw_data/voluntary_ImmGenATAC18_AllTFmotifsInOCRs.txt"
 elif who_this == "Kaja":
-    ATAC_seq_path = "D:\Uni\4. Semester\Bioinfo\datasets\processed atac seq data and called peaks.csv"
-    RNA_seq_path = "D:\Uni\4. Semester\Bioinfo\datasets\processed rna seq data.csv"
-    Transcription_exons_path = "D:\Uni\4. Semester\Bioinfo\datasets\refFlat.txt"
-    Cell_population_qc_path = "D:\Uni\4. Semester\Bioinfo\datasets\summary of immune cell populationsprofiled by atac.xlsx"
-    Voluntary_path = "D:\Uni\4. Semester\Bioinfo\datasets\summary of immune cell populationsprofiled by atac.xlsx"
+    ATAC_seq_path = "D:\\Uni\\4. Semester\\Bioinfo\\datasets\\processed atac seq data and called peaks.csv"
+    RNA_seq_path = "D:\\Uni\\4. Semester\\Bioinfo\\datasets\\processed rna seq data.csv"
+    Transcription_exons_path = "D:\\Uni\\4. Semester\\Bioinfo\\datasets\\refFlat.txt"
+    Cell_population_qc_path = "D:\\Uni\\4. Semester\\Bioinfo\\datasets\\summary of immune cell populationsprofiled by atac.xlsx"
+    Voluntary_path = "D:\\Uni\\4. Semester\\Bioinfo\\datasets\\summary of immune cell populationsprofiled by atac.xlsx"
 elif who_this == "Pia":
     ATAC_seq_path = "/Users/piakentschke/Documents/Uni/Data Analysis/ImmGenATAC18_AllOCRsInfo.csv"
     RNA_seq_path = "/Users/piakentschke/Documents/Uni/Data Analysis/RNA-seq_data.csv"
@@ -41,18 +43,18 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     '''
 
     # loading of data sets
-    ATAC_seq = pd.read_csv(ATAC_seq_path, keep_default_na=False)
-    RNA_seq = pd.read_csv(RNA_seq_path)
-    QC_metrics = pd.read_excel(Cell_population_qc_path)
+    ATAC_seq = pd.read_csv(ATAC_seq_path, keep_default_na=False, header=0, index_col=0)
+    RNA_seq = pd.read_csv(RNA_seq_path, header=0, index_col=0)
+    QC_metrics = pd.read_excel(Cell_population_qc_path, header=0, index_col=0)
     exons=pd.read_csv(Transcription_exons_path, sep="\t")
     exons.columns = ["Genname", "ID", "Chromosom", "Strand", "Transcription Start", "Transcription End", "CDS_Start", "CDS_End", 
     "ExonCount", "ExonStarts", "ExonEnds"]
     
     # lisiting for sub sets and transponing of ATAC
-    list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc['LTHSC.34-.BM': 'proB.CLP.BM']),
-    list_ATAC_diff_Tc_all= list(ATAC_seq.loc['preT.DN1.Th':'NK.27+11b-.BM']),
-    list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc['preT.DN1.Th':'Tgd.g2+d17.24a+.Th']),
-    list_ATAC_diff_Tc_gd = list(ATAC_seq.loc['Tgd.g2+d17.24a+.Th':'NK.27+11b-.BM']),
+    list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'proB.CLP.BM'])
+    list_ATAC_diff_Tc_all= list(ATAC_seq.loc[:,'preT.DN1.Th':'NK.27+11b-.BM'])
+    list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc[:,'preT.DN1.Th':'Tgd.g2+d17.24a+.Th'])
+    list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'NK.27+11b-.BM'])
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
     
     list_cells = {
@@ -64,15 +66,18 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     }
 
     ATAC_seq_T = ATAC_seq.T
-    ATAC_seq_only_scores = ATAC_seq.loc['LTHSC.34-.BM':]
+    ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
 
     # normalization
     if normalization is None:
         # log2 normalization
         ATAC_seq_only_scores_norm = np.log2(ATAC_seq_only_scores)
-        ATAC_seq_only_head = ATAC_seq.loc[:'LTHSC.34-.BM']
+        ATAC_seq_only_head = ATAC_seq.loc[:,:'LTHSC.34-.BM']
         ATAC_seq = pd.concat([ATAC_seq_only_head, ATAC_seq_only_scores_norm])
         ATAC_seq_T = ATAC_seq.T
+
+        RNA_seq = np.log2(RNA_seq)
+
     elif normalization == "none":
         # no normalization
         pass
