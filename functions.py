@@ -1,3 +1,36 @@
+who_this = 'Laila'
+
+# import of packages
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import scipy.stats
+import sklearn.manifold as sklm
+import os
+from sklearn.decomposition import PCA
+
+if who_this == "Laila":
+    ATAC_seq_path = "/Users/laila/github/bioinfo25/Raw_data/ATAC-seq_called-peaks_ImmGenATAC18_AllOCRsInfo.csv"
+    RNA_seq_path = "/Users/laila/github/bioinfo25/Raw_data/RNA-seq_mmc2.csv"
+    Transcription_exons_path = "/Users/laila/github/bioinfo25/Raw_data/Transkrips-exon_refFlat.txt"
+    Cell_population_qc_path = "/Users/laila/github/bioinfo25/Raw_data/cell-populations_qc-matrices_mmc1.xlsx"
+    Voluntary_path = "/Users/laila/github/bioinfo25/Raw_data/voluntary_ImmGenATAC18_AllTFmotifsInOCRs.txt"
+elif who_this == "Kaja":
+    ATAC_seq_path = "D:\Uni\4. Semester\Bioinfo\datasets\processed atac seq data and called peaks.csv"
+    RNA_seq_path = "D:\Uni\4. Semester\Bioinfo\datasets\processed rna seq data.csv"
+    Transcription_exons_path = "D:\Uni\4. Semester\Bioinfo\datasets\refFlat.txt"
+    Cell_population_qc_path = "D:\Uni\4. Semester\Bioinfo\datasets\summary of immune cell populationsprofiled by atac.xlsx"
+    Voluntary_path = "D:\Uni\4. Semester\Bioinfo\datasets\summary of immune cell populationsprofiled by atac.xlsx"
+elif who_this == "Pia":
+    ATAC_seq_path = "/Users/piakentschke/Documents/Uni/Data Analysis/ImmGenATAC18_AllOCRsInfo.csv"
+    RNA_seq_path = "/Users/piakentschke/Documents/Uni/Data Analysis/RNA-seq_data.csv"
+    Transcription_exons_path = "/Users/piakentschke/Documents/Uni/Data Analysis/refFlat.txt"
+    Cell_population_qc_path = "/Users/piakentschke/Documents/Uni/Data Analysis/mmc1.xlsx"
+    Voluntary_path = "/Users/piakentschke/Documents/Uni/Data Analysis/ImmGenATAC18_AllTFmotifsInOCRs.txt"
+elif who_this == "Helen":
+    pass
+
 # data_clean_up: vorläufig
 def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     ''' 
