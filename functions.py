@@ -2,6 +2,8 @@ def set_user(user):
     global who_this
     who_this = user
 
+who_this='Kaja'
+
 # import of packages
 import pandas as pd
 import matplotlib.pyplot as plt
