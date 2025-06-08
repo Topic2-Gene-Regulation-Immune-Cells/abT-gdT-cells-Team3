@@ -2,8 +2,6 @@ def set_user(user):
     global who_this
     who_this = user
 
-who_this='Kaja'
-
 # import of packages
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -51,21 +49,26 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     exons=pd.read_csv(Transcription_exons_path, sep="\t")
     exons.columns = ["Genname", "ID", "Chromosom", "Strand", "Transcription Start", "Transcription End", "CDS_Start", "CDS_End", 
     "ExonCount", "ExonStarts", "ExonEnds"]
+
+    # remove NAs and inf values
+    ## ATAC-seq
+    inf_rows = ATAC_seq[ATAC_seq['_-log10_bestPvalue'].isin([np.inf, -np.inf])]
+    ATAC_seq = ATAC_seq[ATAC_seq['_-log10_bestPvalue'] != np.inf]
+    ## RNA-seq
+    RNA_NA = RNA_seq.isna().sum().sum()
+    RNA_val = (RNA_seq.iloc[:, :] < 5).sum().sum()
+    RNA_seq = RNA_seq[(RNA_seq >= 5).all(axis=1)]
+    RNA_seq = RNA_seq.dropna(axis=0, how='any')
+    QC_metrics = QC_metrics.dropna(axis=0, how='any')
+    ATAC_seq = ATAC_seq.dropna(axis=0, how='any')
     
     # lisiting for sub sets and transponing of ATAC
-    list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'proB.CLP.BM'])
-    list_ATAC_diff_Tc_all= list(ATAC_seq.loc[:,'preT.DN1.Th':'NK.27+11b-.BM'])
-    list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc[:,'preT.DN1.Th':'Tgd.g2+d17.24a+.Th'])
-    list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'NK.27+11b-.BM'])
+    list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'MPP4.135+.BM'])
+    list_ATAC_diff_Tc_all= list(ATAC_seq.loc[:,'preT.DN1.Th':'Tgd.Sp'])
+    list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc[:,'preT.DN1.Th':'NKT.Sp.LPS.3d'])
+    list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'Tgd.Sp'])
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
-    
-    list_cells = {
-        'list_ATAC_stem_Tc_Bc': list_ATAC_stem_Tc_Bc,
-        'list_ATAC_diff_Tc_all': list_ATAC_diff_Tc_all,
-        'list_ATAC_diff_Tc_pre_ab_act': list_ATAC_diff_Tc_pre_ab_act,
-        'list_ATAC_diff_Tc_gd': list_ATAC_diff_Tc_gd,
-        'list_ATAC_Tc_all': list_ATAC_Tc_all
-    }
+    list_ATAC_Tc_all = list(dict.fromkeys(list_ATAC_Tc_all))
 
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
@@ -74,30 +77,38 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     if normalization is None:
         # log2 normalization
         ATAC_seq_only_scores_norm = np.log2(ATAC_seq_only_scores)
-        ATAC_seq_only_head = ATAC_seq.loc[:,:'LTHSC.34-.BM']
-        ATAC_seq = pd.concat([ATAC_seq_only_head, ATAC_seq_only_scores_norm])
+        ATAC_seq_only_head = ATAC_seq.loc[:,:'genes.within.100Kb']
+        ATAC_seq = pd.concat([ATAC_seq_only_head, ATAC_seq_only_scores_norm], axis=1)
         ATAC_seq_T = ATAC_seq.T
 
         RNA_seq = np.log2(RNA_seq)
+        RNA_seq_T = RNA_seq.T
 
     elif normalization == "none":
         # no normalization
         pass
 
     #thresholds
-
+    if p_threshold is not None:
+        ATAC_seq = ATAC_seq[ATAC_seq["_-log10_bestPvalue"] >= p_threshold]
+    
     #summary
 
-    results = {
+    data = {
         'ATAC_seq': ATAC_seq,
         'ATAC_seq_T': ATAC_seq_T,
         'ATAC_seq_only_scores': ATAC_seq_only_scores,
-        'list_cells': list_cells,
+        'norm': ATAC_seq_only_scores_norm,
         'RNA_seq': RNA_seq,
         'QC_metrics': QC_metrics,
         'exons': exons,
+        'list_ATAC_stem_Tc_Bc': list_ATAC_stem_Tc_Bc,
+        'list_ATAC_diff_Tc_all': list_ATAC_diff_Tc_all,
+        'list_ATAC_diff_Tc_pre_ab_act': list_ATAC_diff_Tc_pre_ab_act,
+        'list_ATAC_diff_Tc_gd': list_ATAC_diff_Tc_gd,
+        'list_ATAC_Tc_all': list_ATAC_Tc_all
     }
-    return results
+    return data
 
 # cluster
 
