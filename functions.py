@@ -77,6 +77,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
 
+
     # normalization
     if normalization is None:
         # log2 normalization
@@ -96,13 +97,18 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     if p_threshold is not None:
         ATAC_seq = ATAC_seq[ATAC_seq["_-log10_bestPvalue"] >= p_threshold]
     
-    #summary
+    # additional df for clustering
+    QC_info = QC_metrics[['CellType', 'Lineage', 'CellFamily', 'Organ']]
+    ATAC_seq_T.index.name = 'CellType'  # if not already set
+    ATAC_seq_T_reset = ATAC_seq_T.reset_index()
+    ATAC_w_info = ATAC_seq_T_reset.merge(QC_info, on='CellType', how='left')
 
     data = {
         'ATAC_seq': ATAC_seq,
         'ATAC_seq_T': ATAC_seq_T,
         'ATAC_seq_only_scores': ATAC_seq_only_scores,
         'norm': ATAC_seq_only_scores_norm,
+        'ATAC_seq_w_info': ATAC_w_info,
         'RNA_seq': RNA_seq,
         'QC_metrics': QC_metrics,
         'exons': exons,
