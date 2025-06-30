@@ -40,7 +40,11 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         Cell_population_qc_path = "/Users/piakentschke/Documents/Uni/Data Analysis/mmc1.xlsx"
         Voluntary_path = "/Users/piakentschke/Documents/Uni/Data Analysis/ImmGenATAC18_AllTFmotifsInOCRs.txt"
     elif who_this == "Helen":
-        pass
+        ATAC_seq_path = r"C:\Users\helen\Documents\downloads\ImmGenATAC18_AllOCRsInfo.csv"
+        RNA_seq_path = r"C:\Users\helen\Documents\downloads\mmc2.csv" 
+        Transcription_exons_path= r"C:\Users\helen\Downloads\datasets\Transkrips-exon_refFlat.txt"
+        Cell_population_qc_path = r"C:\Users\helen\Dowloads\datasets\mmc1.xlsx"
+        Voluntary_path = r"C:\Users\helen\Downloads\datasets\ImmGenATAC18_AllTFmotifsInOCRs.txt"
 
     # loading of data sets
     ATAC_seq = pd.read_csv(ATAC_seq_path, keep_default_na=False, header=0, index_col=0)
@@ -72,16 +76,17 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
+    
 
     # normalization
     if normalization is None:
         # log2 normalization
-        ATAC_seq_only_scores_norm = np.log2(ATAC_seq_only_scores)
+        ATAC_seq_only_scores_norm = np.log2(ATAC_seq_only_scores+1)
         ATAC_seq_only_head = ATAC_seq.loc[:,:'genes.within.100Kb']
         ATAC_seq = pd.concat([ATAC_seq_only_head, ATAC_seq_only_scores_norm], axis=1)
         ATAC_seq_T = ATAC_seq.T
 
-        RNA_seq = np.log2(RNA_seq)
+        RNA_seq = np.log2(RNA_seq+1)
         RNA_seq_T = RNA_seq.T
 
     elif normalization == "none":
@@ -92,13 +97,19 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     if p_threshold is not None:
         ATAC_seq = ATAC_seq[ATAC_seq["_-log10_bestPvalue"] >= p_threshold]
     
-    #summary
+    # additional df for clustering
+    QC_info = QC_metrics[['CellType', 'Lineage', 'CellFamily', 'Organ']]
+    ATAC_seq_T.index.name = 'CellType'  # if not already set
+    ATAC_seq_T_reset = ATAC_seq_T.reset_index()
+    ATAC_w_info = ATAC_seq_T_reset.merge(QC_info, on='CellType', how='left')
+    ATAC_w_info = ATAC_w_info.drop_duplicates(subset='CellType', keep='first').reset_index(drop=True)
 
     data = {
         'ATAC_seq': ATAC_seq,
         'ATAC_seq_T': ATAC_seq_T,
         'ATAC_seq_only_scores': ATAC_seq_only_scores,
         'norm': ATAC_seq_only_scores_norm,
+        'ATAC_seq_w_info': ATAC_w_info,
         'RNA_seq': RNA_seq,
         'QC_metrics': QC_metrics,
         'exons': exons,
@@ -117,18 +128,20 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 # t-SNE
 def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
     '''
+    no more than 20 000 cols!
     df: pandas.df [rows x cols];
-    cells: list of cell row names;
+    cols: list of cell row names;
     components: no. of PCAs < len(rows);
     perplexity: perplexity < len(rows);
     gini_coloring: feature that should be colored, automatically maximun, manually after e.g. specifig cell / TSS
     '''
     
     # preparation of data
+    df_peaks = df.select_dtypes(include=[np.number])
     if rows is not None:
-        subset_df = df.loc[rows, cols]
+        subset_df = df_peaks.loc[rows, cols]
     else:
-        subset_df = df.loc[:,cols]
+        subset_df = df_peaks.loc[:,cols]
     components = min(components, subset_df.shape[0], subset_df.shape[1])
     perplexity = min(perplexity, subset_df.shape[0] - 1)
 
@@ -154,22 +167,49 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
     gini_scores = subset_df.apply(gini_index, axis=0)
     
     # coloring
-    if gini_coloring is None:
-        name_gini_coloring = gini_scores.idxmax()
-    elif isinstance(gini_coloring, int):
-        name_gini_coloring = subset_df.columns[gini_coloring]
-    else:
-        name_gini_coloring = gini_coloring
+    # if gini_coloring is None:
+        # name_gini_coloring = gini_scores.idxmax()
+    #elif isinstance(gini_coloring, int):
+        #name_gini_coloring = subset_df.columns[gini_coloring]
+    #else:
+       #name_gini_coloring = gini_coloring
 
-    color_values = subset_df[name_gini_coloring].values
+    #color_values = subset_df[name_gini_coloring].values
+
+    if gini_coloring is None:
+        color_values = 'lightgrey'
+        colorbar_label = None
+        plot_title = f't-SNE (keine Gini-Färbung)'
+        scatter_kwargs = dict(color=color_values, alpha=0.7)
+    elif gini_coloring == "TSS":
+        # TSS peaks blue, rest gray
+        if "TSS" in df.columns:
+            mask = df.loc[subset_df.index, "TSS"] != ''
+            color_values = np.where(mask, "royalblue", "lightgrey")
+            colorbar_label = None
+            plot_title = f't-SNE: Peaks in TSS-Nähe (blau)'
+            scatter_kwargs = dict(c=color_values, alpha=0.7)
+        else:
+            raise ValueError('Spalte "TSS" nicht im DataFrame!')
+    else:
+        # color specific gene red (TSS-col)
+        if "TSS" in df.columns:
+            mask = df.loc[subset_df.index, "TSS"] == gini_coloring
+            color_values = np.where(mask, "crimson", "lightgrey")
+            colorbar_label = None
+            plot_title = f't-SNE: Peaks mit TSS für {gini_coloring} (rot)'
+            scatter_kwargs = dict(c=color_values, alpha=0.7)
+        else:
+            raise ValueError('Spalte "TSS" nicht im DataFrame!')
 
     # plot
     plt.figure(figsize=(8,6))
-    sc = plt.scatter(tsne_df['tSNE1'], tsne_df['tSNE2'], c=color_values, cmap='viridis', alpha=0.7)
-    plt.colorbar(sc, label=f'activity of {name_gini_coloring}')
+    sc = plt.scatter(tsne_df['tSNE1'], tsne_df['tSNE2'], **scatter_kwargs)
+    if colorbar_label is not None:
+        plt.colorbar(sc, label=colorbar_label)
     plt.xlabel('t-SNE 1')
     plt.ylabel('t-SNE 2')
-    plt.title(f't-SNE, colored with gini index after peak: {name_gini_coloring}')
+    plt.title(plot_title)
     plt.tight_layout()
     plt.show()
 
