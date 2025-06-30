@@ -11,6 +11,7 @@ import scipy.stats
 import sklearn.manifold as sklm
 import os
 from sklearn.decomposition import PCA
+import scanpy as sc
 
 # data_clean_up: vorläufig
 def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
@@ -47,7 +48,9 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         Voluntary_path = r"C:\Users\helen\Downloads\datasets\ImmGenATAC18_AllTFmotifsInOCRs.txt"
 
     # loading of data sets
-    ATAC_seq = pd.read_csv(ATAC_seq_path, keep_default_na=False, header=0, index_col=0)
+    ATAC_seq = pd.read_csv(ATAC_seq_path, header=0)
+    ATAC_seq = ATAC_seq.set_index('ImmGenATAC1219.peakID')
+    ATAC_copy = ATAC_seq.copy()
     RNA_seq = pd.read_csv(RNA_seq_path, header=0, index_col=0)
     QC_metrics = pd.read_excel(Cell_population_qc_path, header=0, index_col=0)
     exons=pd.read_csv(Transcription_exons_path, sep="\t")
@@ -64,7 +67,6 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     RNA_seq = RNA_seq[(RNA_seq >= 5).all(axis=1)]
     RNA_seq = RNA_seq.dropna(axis=0, how='any')
     QC_metrics = QC_metrics.dropna(axis=0, how='any')
-    ATAC_seq = ATAC_seq.dropna(axis=0, how='any')
     
     # lisiting for sub sets and transponing of ATAC
     list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'MPP4.135+.BM'])
@@ -73,7 +75,11 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'Tgd.Sp'])
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
     list_ATAC_Tc_all = list(dict.fromkeys(list_ATAC_Tc_all))
-
+    
+    #thresholds
+    if p_threshold is not None:
+        ATAC_seq = ATAC_seq[ATAC_seq["_-log10_bestPvalue"] >= p_threshold]
+    
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
     
@@ -92,14 +98,10 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     elif normalization == "none":
         # no normalization
         pass
-
-    #thresholds
-    if p_threshold is not None:
-        ATAC_seq = ATAC_seq[ATAC_seq["_-log10_bestPvalue"] >= p_threshold]
     
     # additional df for clustering
     QC_info = QC_metrics[['CellType', 'Lineage', 'CellFamily', 'Organ']]
-    ATAC_seq_T.index.name = 'CellType'  # if not already set
+    ATAC_seq_T.index.name = 'CellType'
     ATAC_seq_T_reset = ATAC_seq_T.reset_index()
     ATAC_w_info = ATAC_seq_T_reset.merge(QC_info, on='CellType', how='left')
     ATAC_w_info = ATAC_w_info.drop_duplicates(subset='CellType', keep='first').reset_index(drop=True)
@@ -117,7 +119,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'list_ATAC_diff_Tc_all': list_ATAC_diff_Tc_all,
         'list_ATAC_diff_Tc_pre_ab_act': list_ATAC_diff_Tc_pre_ab_act,
         'list_ATAC_diff_Tc_gd': list_ATAC_diff_Tc_gd,
-        'list_ATAC_Tc_all': list_ATAC_Tc_all
+        'list_ATAC_Tc_all': list_ATAC_Tc_all,
+        'test1': ATAC_copy
     }
     return data
 
