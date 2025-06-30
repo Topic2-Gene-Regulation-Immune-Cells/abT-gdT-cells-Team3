@@ -76,7 +76,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
-
+    
 
     # normalization
     if normalization is None:
@@ -102,6 +102,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     ATAC_seq_T.index.name = 'CellType'  # if not already set
     ATAC_seq_T_reset = ATAC_seq_T.reset_index()
     ATAC_w_info = ATAC_seq_T_reset.merge(QC_info, on='CellType', how='left')
+    ATAC_w_info = ATAC_w_info.drop_duplicates(subset='CellType', keep='first').reset_index(drop=True)
 
     data = {
         'ATAC_seq': ATAC_seq,
