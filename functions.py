@@ -66,7 +66,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     RNA_val = (RNA_seq.iloc[:, :] < 5).sum().sum()
     RNA_seq = RNA_seq[(RNA_seq >= 5).all(axis=1)]
     RNA_seq = RNA_seq.dropna(axis=0, how='any')
-    QC_metrics = QC_metrics.dropna(axis=0, how='any')
+
     
     # lisiting for sub sets and transponing of ATAC
     list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'MPP4.135+.BM'])
