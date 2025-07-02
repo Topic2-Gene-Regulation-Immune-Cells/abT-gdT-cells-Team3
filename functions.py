@@ -106,6 +106,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'ATAC_seq_only_scores': ATAC_seq_only_scores,
         'norm': ATAC_seq_only_scores_norm,
         'RNA_seq': RNA_seq,
+        'RNA_seq_T': RNA_seq_T, 
         'QC_metrics': QC_metrics,
         'exons': exons,
         'list_ATAC_stem_Tc_Bc': list_ATAC_stem_Tc_Bc,
