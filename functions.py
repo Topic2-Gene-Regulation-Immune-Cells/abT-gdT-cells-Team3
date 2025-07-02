@@ -86,7 +86,18 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 
     # normalization
     if normalization is None:
-        # log2 normalization
+        # CPM + log2 normalization
+        libsize = ATAC_seq_only_scores.sum(axis=0)
+        cpm = ATAC_seq_only_scores.divide(libsize, axis=1) * 1e6
+        ATAC_seq_only_scores_norm = np.log2(cpm+1)
+        ATAC_seq_only_head = ATAC_seq.loc[:,:'genes.within.100Kb']
+        ATAC_seq = pd.concat([ATAC_seq_only_head, ATAC_seq_only_scores_norm], axis=1)
+        ATAC_seq_T = ATAC_seq.T
+
+        RNA_seq = np.log2(RNA_seq+1)
+        RNA_seq_T = RNA_seq.T
+    elif normalization == "noCPM":
+        # log2 normalization w/o CPM
         ATAC_seq_only_scores_norm = np.log2(ATAC_seq_only_scores+1)
         ATAC_seq_only_head = ATAC_seq.loc[:,:'genes.within.100Kb']
         ATAC_seq = pd.concat([ATAC_seq_only_head, ATAC_seq_only_scores_norm], axis=1)
@@ -94,17 +105,15 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 
         RNA_seq = np.log2(RNA_seq+1)
         RNA_seq_T = RNA_seq.T
-
     elif normalization == "none":
         # no normalization
         pass
 
-
     data = {
         'ATAC_seq': ATAC_seq,
         'ATAC_seq_T': ATAC_seq_T,
-        'ATAC_seq_only_scores': ATAC_seq_only_scores,
-        'norm': ATAC_seq_only_scores_norm,
+        'ATAC_seq_scores_no_norm': ATAC_seq_only_scores,
+        'norm_scores': ATAC_seq_only_scores_norm,
         'RNA_seq': RNA_seq,
         'RNA_seq_T': RNA_seq_T, 
         'QC_metrics': QC_metrics,
