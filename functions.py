@@ -41,12 +41,12 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         Cell_population_qc_path = "/Users/piakentschke/Documents/Uni/Data Analysis/mmc1.xlsx"
         Voluntary_path = "/Users/piakentschke/Documents/Uni/Data Analysis/ImmGenATAC18_AllTFmotifsInOCRs.txt"
     elif who_this == "Helen":
-        ATAC_seq_path = r"C:\Users\helen\Documents\downloads\ImmGenATAC18_AllOCRsInfo.csv"
-        RNA_seq_path = r"C:\Users\helen\Documents\downloads\mmc2.csv" 
-        Transcription_exons_path= r"C:\Users\helen\downloads\datasets\Transkrips-exon_refFlat.txt"
-        Cell_population_qc_path = r"C:\Users\helen\downloads\datasets\mmc1.xlsx"
-        Voluntary_path = r"C:\Users\helen\downloads\datasets\ImmGenATAC18_AllTFmotifsInOCRs.txt"
-
+        ATAC_seq_path = r"C:\Users\helen\Downloads\datasets\ImmGenATAC18_AllOCRsInfo.csv"
+        RNA_seq_path = r"C:\Users\helen\Downloads\datasets\mmc2.csv" 
+        Transcription_exons_path= r"C:\Users\helen\Downloads\datasets\Transkrips-exon_refFlat.txt"
+        Cell_population_qc_path = r"C:\Users\helen\Downloads\datasets\mmc1.xlsx"
+        Voluntary_path = r"C:\Users\helen\Downloads\datasets\ImmGenATAC18_AllTFmotifsInOCRs.txt"
+        
     # loading of data sets
     ATAC_seq = pd.read_csv(ATAC_seq_path, header=0)
     ATAC_seq = ATAC_seq.set_index('ImmGenATAC1219.peakID')
