@@ -138,7 +138,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'list_ATAC_diff_Tc_ab': list_ATAC_diff_Tc_ab,
         'list_ATAC_diff_Tc_ab_gd': list_ATAC_diff_Tc_ab_gd,
         'list_ATAC_Tc_all': list_ATAC_Tc_all,
-        'test1': ATAC_copy
+        'test1': ATAC_copy,
         'ab_tc': ab_tc,
         'gd_tc': gd_tc,
         'ab_gd_tc': ab_gd_tc,
