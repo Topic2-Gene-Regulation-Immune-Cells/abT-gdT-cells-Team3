@@ -69,17 +69,21 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 
     
     # lisiting for sub sets and transponing of ATAC
-    list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'MPP4.135+.BM'])
-    list_ATAC_diff_Tc_all= list(ATAC_seq.loc[:,'preT.DN1.Th':'Tgd.Sp'])
-    list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc[:,'preT.DN1.Th':'NKT.Sp.LPS.3d'])
-    list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'Tgd.Sp'])
-    list_ATAC_diff_Tc_ab = (
-    list(ATAC_seq.loc[:, 'preT.DN1.Th':'T.4.Nve.Fem.Sp']) +
-    list(ATAC_seq.loc[:, 'Treg.4.FP3+.Nrplo.Co':'T.8.Nve.Sp']) +
-    ['NKT.Sp']
-)
+    list_ATAC_stem_Tc_Bc = list(ATAC_seq.loc[:,'LTHSC.34-.BM': 'MPP4.135+.BM'].columns)
+    list_ATAC_diff_Tc_all= list(ATAC_seq.loc[:,'preT.DN1.Th':'Tgd.Sp'].columns)
+    list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc[:,'preT.DN1.Th':'NKT.Sp.LPS.3d'].columns)
+    list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'Tgd.Sp'].columns)
+    
+    list_ATAC_ab_1 = list(ATAC_seq.loc[:, 'preT.DN1.Th':'T.8.Nve.Sp'].columns)
+    list_ATAC_ab_2 = list(ATAC_seq.loc[:, 'Treg.4.FP3+.Nrplo.Co':'Treg.4.25hi.Sp'].columns)
+    list_ATAC_ab_3 = ['NKT.Sp']
 
-    list_ATAC_diff_Tc_ab_gd = list_ATAC_diff_Tc_ab + list_ATAC_diff_Tc_gd
+    list_ATAC_Tc_ab = list_ATAC_ab_1 + list_ATAC_ab_2 + list_ATAC_ab_3
+    list_ATAC_Tc_ab = list(dict.fromkeys(list_ATAC_Tc_ab))
+
+    list_ATAC_Tc_ab_gd = list_ATAC_Tc_ab + list_ATAC_diff_Tc_gd
+    list_ATAC_Tc_ab_gd = list(dict.fromkeys(list_ATAC_Tc_ab_gd))
+
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
     list_ATAC_Tc_all = list(dict.fromkeys(list_ATAC_Tc_all))
     
@@ -121,6 +125,9 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     elif normalization == "none":
         # no normalization
         pass
+    
+    peak_std = ATAC_seq_only_scores_norm.std(axis=1, numeric_only=True)
+    top_peaks = peak_std.nlargest(2500).index
 
     data = {
         'ATAC_seq': ATAC_seq,
@@ -135,10 +142,11 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'list_ATAC_diff_Tc_all': list_ATAC_diff_Tc_all,
         'list_ATAC_diff_Tc_pre_ab_act': list_ATAC_diff_Tc_pre_ab_act,
         'list_ATAC_diff_Tc_gd': list_ATAC_diff_Tc_gd,
-        'list_ATAC_diff_Tc_ab': list_ATAC_diff_Tc_ab,
-        'list_ATAC_diff_Tc_ab_gd': list_ATAC_diff_Tc_ab_gd,
+        'list_ATAC_Tc_ab': list_ATAC_Tc_ab,
+        'list_ATAC_Tc_ab_gd': list_ATAC_Tc_ab_gd,
         'list_ATAC_Tc_all': list_ATAC_Tc_all,
         'test1': ATAC_copy,
+        'top2500std': top_peaks,
         'ab_tc': ab_tc,
         'gd_tc': gd_tc,
         'ab_gd_tc': ab_gd_tc,
