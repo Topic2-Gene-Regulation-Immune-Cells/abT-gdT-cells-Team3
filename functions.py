@@ -83,6 +83,10 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
     list_ATAC_Tc_all = list(dict.fromkeys(list_ATAC_Tc_all))
     
+    
+    ab_tc= [preT.DN1.Th,preT.DN2a.Th, preT.DN2b.Th, preT.DN3.Th, T.DN4.Th, T.ISP.Th, T.DP.Th, T.4.Th, T.8.Th, T.4.Nve.Sp, T.4.Nve.Fem.Sp, Treg.4.FP3+.Nrplo.Co, Treg.4.25hi.Sp, T.8.Nve.Sp, NKT.Sp]
+    gd_tc=[Tgd.g2+d17.24a+.Th, Tgd.g2+d17.LN, Tgd.g2+d1.24a+.Th, Tgd.g2+d1.LN, Tgd.g1.1+d1.24a+.Th,Tgd.g1.1+d1.LN, Tgd.Sp]
+   
     #thresholds
     if p_threshold is not None:
         ATAC_seq = ATAC_seq[ATAC_seq["_-log10_bestPvalue"] >= p_threshold]
@@ -134,6 +138,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'list_ATAC_diff_Tc_ab_gd': list_ATAC_diff_Tc_ab_gd,
         'list_ATAC_Tc_all': list_ATAC_Tc_all,
         'test1': ATAC_copy
+        'ab_tc': ab_tc,
+        'gd_tc': gd_tc,
     }
     return data
 
