@@ -73,6 +73,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     list_ATAC_diff_Tc_all= list(ATAC_seq.loc[:,'preT.DN1.Th':'Tgd.Sp'])
     list_ATAC_diff_Tc_pre_ab_act = list(ATAC_seq.loc[:,'preT.DN1.Th':'NKT.Sp.LPS.3d'])
     list_ATAC_diff_Tc_gd = list(ATAC_seq.loc[:,'Tgd.g2+d17.24a+.Th':'Tgd.Sp'])
+    list_ATAC_diff_Tc_ab = list(ATAC_seq.loc[:,'preT.DN1.Th':'T.4.Nve.Fem.Sp'+ 'Treg.4.FP3+.Nrplo.Co':'T.8.Nve.Sp'+'NKT.Sp'])
+    list_ATAC_diff_Tc_ab_gd = list_ATAC_diff_Tc_ab + list_ATAC_diff_Tc_gd
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
     list_ATAC_Tc_all = list(dict.fromkeys(list_ATAC_Tc_all))
     
@@ -122,6 +124,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'list_ATAC_diff_Tc_all': list_ATAC_diff_Tc_all,
         'list_ATAC_diff_Tc_pre_ab_act': list_ATAC_diff_Tc_pre_ab_act,
         'list_ATAC_diff_Tc_gd': list_ATAC_diff_Tc_gd,
+        'list_ATAC_diff_Tc_ab': list_ATAC_diff_Tc_ab,
+        'list_ATAC_diff_Tc_ab_gd': list_ATAC_diff_Tc_ab_gd,
         'list_ATAC_Tc_all': list_ATAC_Tc_all,
         'test1': ATAC_copy
     }
