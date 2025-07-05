@@ -62,7 +62,7 @@ For exploring and analzing the data, we focus on covering these points:
 - Regression
 
 We established a file "functions.py", in which defined functions can be saved to establish an integrating workflow for the team.
-Code development and troubleshooting were supported by assistance of AI-based tools such as ChatGPT.
+Code development and troubleshooting were assisted of AI-based tools such as ChatGPT.
 
 
 ## Results
