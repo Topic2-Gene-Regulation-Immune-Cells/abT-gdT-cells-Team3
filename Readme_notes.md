@@ -4,6 +4,16 @@ Introduction
 
 theoretical background
 
+gene regulation, immune cells, cres
+
+
+data
+analysis overview (mit regulatory landscape)
+
+regulatory landscape
+linking cres with expression(1.3,4, 2)
+
+
 
 Results
 
