@@ -273,7 +273,28 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
 
     return tsne_df, gini_scores
 
-# correlation_pearson
+# correlation
+
+def correlate_promoter_atac_rna(ATAC, RNA, ATAC_scores):
+
+    '''use only same cell type names'''
+
+    gemeinsame_celltypen = [col for col in ATAC_scores.columns if col in RNA.columns]
+    print(f"same cell types ({len(gemeinsame_celltypen)}):")
+    
+    promoter_peaks = ATAC[ATAC['distance_to_TSS'] <= 2000].copy()
+    promoter_peaks['main_gene'] = promoter_peaks['nearest_gene']
+    results = []
+    for idx, row in promoter_peaks.iterrows():
+        gene = row['main_gene']
+        if gene in RNA.index:
+            atac_vec = row[gemeinsame_celltypen].values.astype(float)
+            rna_vec = RNA.loc[gene, gemeinsame_celltypen].values.astype(float)
+            if not (np.isnan(atac_vec).any() or np.isnan(rna_vec).any()):
+                r, p = scipy.stats.pearsonr(atac_vec, rna_vec)
+                results.append({'peak_id': idx, 'gene': gene, 'r': r, 'p': p})
+    print(f"Number of calculated correlations: {len(results)}")
+    return pd.DataFrame(results)
 
 
 
