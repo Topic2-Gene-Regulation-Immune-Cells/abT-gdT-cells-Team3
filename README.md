@@ -73,6 +73,27 @@ Code development and troubleshooting were assisted of AI-based tools such as Cha
 
 -> QC, normalization, thresholding
 
+2. Identify and characterize CREs 
+- R2 distribution accross cells histogramm
+
+
+lineage specific cres:
+- coeff shift plot
+- plot top genes all vs lineage
+- top abgd cres r2 score
+- histograms showing top cres for ab, gd and abgd
+- r2 variance as comparison
+- lasso coeff for scd2
+
+
+3. Identify clusters of chromatin signal / gene expression and look for (known) relations
+
+- umap rna & umap ATAC
+- correlation of rna/atac umap
+- hierarichal clustering of atac vs gene expression data
+
+    - rna data: correlation of leiden clusters with cell type
+
 
 ## Discussion
 chatg:
