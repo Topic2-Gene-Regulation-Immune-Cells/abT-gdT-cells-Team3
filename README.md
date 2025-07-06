@@ -28,11 +28,10 @@ The project can be divided to a few key aspects:
 
 Further investigating the data, we can define more detailed questions according to the guideline we were given:
 1. Characterization of the chromatin landscape
-1.1 how variable is the chromatin signal within and across cells? (1.i.a, 1.ii: nur descriptive plots)
-1.2 should some peaks or cell types be removed due to technical issues (quality control) or lack of signal? (1.i.b, 1.ii.a)
-1.3 should we apply additional normalization or thresholds? (hexbins?, 1.i.b)
+1.1 How variable is the chromatin signal within and across cells? (1.i.a, 1.ii: nur descriptive plots)
+1.2 Should some peaks or cell types be removed due to technical issues (quality control) or lack of signal? Should we apply additional normalization or thresholds? (1.i.b, 1.ii.a)
 
-2. Identify and classify CREs
+2. Identification and classification of CREs
 2.1 How do we define (CREs) ? / Promoter/Enhancer and other descriptive categories? (1.ii. allgemein)
 2.2 Does the signal vary significantly between Promoter and Enhancer? (1.ii.b)
 2.3 Are CREs related to TSS distance and how are they located? (2.iii.a)
@@ -41,7 +40,7 @@ Further investigating the data, we can define more detailed questions according 
 2.6 Which CREs control ab and gd T cell lineage specific genes?
 2.7 How do we characterize acivating and repressing genes/CREs?? (1.ii, 2.iv.e,f,g,h (&comparison w/ and w/o regression!))
 
-3. Identify clusters of chromatin signal / gene expression and look for (known) relations
+3. Identifcation of clusters of chromatin signal / gene expression and finding (known) relations
 3.1 How do cell types cluster based on OCR and based on gene expression? (1.iii.,b; 2,ii; 2.i)
     3.1.1 Do they reproduce known relationship between cells and between OCR and gene expression? (1.iii.a, 2.i, 2.ii.a,(b))
 3.2 How do peaks (ATAC) cluster together? (1.iv.a,b)
