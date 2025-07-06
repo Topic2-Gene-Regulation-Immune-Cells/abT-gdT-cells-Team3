@@ -88,6 +88,9 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     list_ATAC_Tc_all = list_ATAC_stem_Tc_Bc + list_ATAC_diff_Tc_all
     list_ATAC_Tc_all = list(dict.fromkeys(list_ATAC_Tc_all))
     
+    ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
+    list_ATAC_scores = list(ATAC_seq_only_scores.columns)
+    
     
     ab_tc= ['preT.DN1.Th','preT.DN2a.Th', 'preT.DN2b.Th', 'preT.DN3.Th', 'T.DN4.Th', 'T.ISP.Th', 'T.DP.Th', 'T.4.Th', 'T.8.Th', 'T.4.Nve.Sp', 'T.4.Nve.Fem.Sp', 'Treg.4.FP3+.Nrplo.Co', 'Treg.4.25hi.Sp', 'T.8.Nve.Sp', 'NKT.Sp']
     gd_tc=['Tgd.g2+d17.24a+.Th', 'Tgd.g2+d17.LN', 'Tgd.g2+d1.24a+.Th', 'Tgd.g2+d1.LN', 'Tgd.g1.1+d1.24a+.Th','Tgd.g1.1+d1.LN', 'Tgd.Sp']
@@ -99,9 +102,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         
     
     ATAC_seq_T = ATAC_seq.T
-    ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
-
     
+
     # normalization
     if normalization is None:
         # CPM + log2 normalization
@@ -161,6 +163,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
         'ab_tc': ab_tc,
         'gd_tc': gd_tc,
         'ab_gd_tc': ab_gd_tc,
+        'list_ATAC_scores': list_ATAC_scores
     }
     return data
 
@@ -271,5 +274,7 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
     return tsne_df, gini_scores
 
 # correlation_pearson
+
+
 
 # linear regression
