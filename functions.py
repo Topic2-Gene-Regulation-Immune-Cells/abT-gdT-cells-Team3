@@ -14,7 +14,7 @@ from sklearn.decomposition import PCA
 import scanpy as sc
 from sklearn.feature_selection import VarianceThreshold
 
-# data_clean_up: vorläufig
+# data_clean_up:
 def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     ''' 
     loads data set;
@@ -234,7 +234,7 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
     if gini_coloring is None:
         color_values = 'lightgrey'
         colorbar_label = None
-        plot_title = f't-SNE (keine Gini-Färbung)'
+        plot_title = f't-SNE'
         scatter_kwargs = dict(color=color_values, alpha=0.7)
     elif gini_coloring == "TSS":
         # TSS peaks blue, rest gray
@@ -242,20 +242,20 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
             mask = df.loc[subset_df.index, "TSS"] != ''
             color_values = np.where(mask, "royalblue", "lightgrey")
             colorbar_label = None
-            plot_title = f't-SNE: Peaks in TSS-Nähe (blau)'
+            plot_title = f't-SNE: Peaks near TSS (blue)'
             scatter_kwargs = dict(c=color_values, alpha=0.7)
         else:
-            raise ValueError('Spalte "TSS" nicht im DataFrame!')
+            raise ValueError('Column "TSS" not in DataFrame!')
     else:
         # color specific gene red (TSS-col)
         if "TSS" in df.columns:
             mask = df.loc[subset_df.index, "TSS"] == gini_coloring
             color_values = np.where(mask, "crimson", "lightgrey")
             colorbar_label = None
-            plot_title = f't-SNE: Peaks mit TSS für {gini_coloring} (rot)'
+            plot_title = f't-SNE: Peaks with TSS for {gini_coloring} (rot)'
             scatter_kwargs = dict(c=color_values, alpha=0.7)
         else:
-            raise ValueError('Spalte "TSS" nicht im DataFrame!')
+            raise ValueError('Column "TSS" not in DataFrame!')
 
     # plot
     plt.figure(figsize=(8,6))
