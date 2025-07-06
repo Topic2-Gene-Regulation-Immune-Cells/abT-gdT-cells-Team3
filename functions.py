@@ -12,6 +12,7 @@ import sklearn.manifold as sklm
 import os
 from sklearn.decomposition import PCA
 import scanpy as sc
+from sklearn.feature_selection import VarianceThreshold
 
 # data_clean_up: vorläufig
 def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
@@ -128,12 +129,22 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     
     peak_std = ATAC_seq_only_scores_norm.std(axis=1, numeric_only=True)
     top_peaks = peak_std.nlargest(2500).index
+    
+    from sklearn.feature_selection import VarianceThreshold
+
+    selector = VarianceThreshold(threshold=0.1) 
+    selector.fit(ATAC_seq_only_scores_norm)
+    ATAC_scores_highvar = ATAC_seq_only_scores_norm.iloc[:, selector.get_support()]
+    ATAC_scores_highvar.index = ATAC_seq_only_head.index
+    ATAC_top = pd.concat([ATAC_seq_only_head, ATAC_scores_highvar], axis=1)
+
 
     data = {
         'ATAC_seq': ATAC_seq,
         'ATAC_seq_T': ATAC_seq_T,
         'ATAC_seq_scores_no_norm': ATAC_seq_only_scores,
         'norm_scores': ATAC_seq_only_scores_norm,
+        'ATAC_top': ATAC_top,
         'RNA_seq': RNA_seq,
         'RNA_seq_T': RNA_seq_T, 
         'QC_metrics': QC_metrics,
