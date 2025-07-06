@@ -12,8 +12,9 @@ import sklearn.manifold as sklm
 import os
 from sklearn.decomposition import PCA
 import scanpy as sc
+from sklearn.feature_selection import VarianceThreshold
 
-# data_clean_up: vorläufig
+# data_clean_up:
 def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     ''' 
     loads data set;
@@ -99,8 +100,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
-    
 
+    
     # normalization
     if normalization is None:
         # CPM + log2 normalization
@@ -128,12 +129,22 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     
     peak_std = ATAC_seq_only_scores_norm.std(axis=1, numeric_only=True)
     top_peaks = peak_std.nlargest(2500).index
+    
+    from sklearn.feature_selection import VarianceThreshold
+
+    selector = VarianceThreshold(threshold=0.1) 
+    selector.fit(ATAC_seq_only_scores_norm)
+    ATAC_scores_highvar = ATAC_seq_only_scores_norm.iloc[:, selector.get_support()]
+    ATAC_scores_highvar.index = ATAC_seq_only_head.index
+    ATAC_top = pd.concat([ATAC_seq_only_head, ATAC_scores_highvar], axis=1)
+
 
     data = {
         'ATAC_seq': ATAC_seq,
         'ATAC_seq_T': ATAC_seq_T,
         'ATAC_seq_scores_no_norm': ATAC_seq_only_scores,
         'norm_scores': ATAC_seq_only_scores_norm,
+        'ATAC_top': ATAC_top,
         'RNA_seq': RNA_seq,
         'RNA_seq_T': RNA_seq_T, 
         'QC_metrics': QC_metrics,
@@ -156,6 +167,18 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 # cluster
 
 # UMAP
+
+# significance
+def significance_marker(p):
+
+    if p < 0.001:
+        return "***"
+    elif p < 0.01:
+        return "**"
+    elif p < 0.05:
+        return "*"
+    else:
+        return "n.s."
 
 # t-SNE
 def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
@@ -211,7 +234,7 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
     if gini_coloring is None:
         color_values = 'lightgrey'
         colorbar_label = None
-        plot_title = f't-SNE (keine Gini-Färbung)'
+        plot_title = f't-SNE'
         scatter_kwargs = dict(color=color_values, alpha=0.7)
     elif gini_coloring == "TSS":
         # TSS peaks blue, rest gray
@@ -219,20 +242,20 @@ def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
             mask = df.loc[subset_df.index, "TSS"] != ''
             color_values = np.where(mask, "royalblue", "lightgrey")
             colorbar_label = None
-            plot_title = f't-SNE: Peaks in TSS-Nähe (blau)'
+            plot_title = f't-SNE: Peaks near TSS (blue)'
             scatter_kwargs = dict(c=color_values, alpha=0.7)
         else:
-            raise ValueError('Spalte "TSS" nicht im DataFrame!')
+            raise ValueError('Column "TSS" not in DataFrame!')
     else:
         # color specific gene red (TSS-col)
         if "TSS" in df.columns:
             mask = df.loc[subset_df.index, "TSS"] == gini_coloring
             color_values = np.where(mask, "crimson", "lightgrey")
             colorbar_label = None
-            plot_title = f't-SNE: Peaks mit TSS für {gini_coloring} (rot)'
+            plot_title = f't-SNE: Peaks with TSS for {gini_coloring} (rot)'
             scatter_kwargs = dict(c=color_values, alpha=0.7)
         else:
-            raise ValueError('Spalte "TSS" nicht im DataFrame!')
+            raise ValueError('Column "TSS" not in DataFrame!')
 
     # plot
     plt.figure(figsize=(8,6))
