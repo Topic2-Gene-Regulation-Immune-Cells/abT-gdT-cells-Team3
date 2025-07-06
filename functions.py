@@ -100,8 +100,8 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     
     ATAC_seq_T = ATAC_seq.T
     ATAC_seq_only_scores = ATAC_seq.loc[:,'LTHSC.34-.BM':]
-    
 
+    
     # normalization
     if normalization is None:
         # CPM + log2 normalization
@@ -167,6 +167,18 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
 # cluster
 
 # UMAP
+
+# significance
+def significance_marker(p):
+
+    if p < 0.001:
+        return "***"
+    elif p < 0.01:
+        return "**"
+    elif p < 0.05:
+        return "*"
+    else:
+        return "n.s."
 
 # t-SNE
 def tSNE (df, cols, components, perplexity, rows=None, gini_coloring=None):
