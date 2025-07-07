@@ -134,7 +134,7 @@ def call_data_clean(p_threshold=None, qc_thresholds=None, normalization=None):
     
     from sklearn.feature_selection import VarianceThreshold
 
-    selector = VarianceThreshold(threshold=0.1) 
+    selector = VarianceThreshold(threshold=0.05) 
     selector.fit(ATAC_seq_only_scores_norm)
     ATAC_scores_highvar = ATAC_seq_only_scores_norm.iloc[:, selector.get_support()]
     ATAC_scores_highvar.index = ATAC_seq_only_head.index
