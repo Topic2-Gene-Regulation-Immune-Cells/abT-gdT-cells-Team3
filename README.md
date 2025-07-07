@@ -165,31 +165,16 @@ Both lineage-based and Leiden-based clustering show clear, coherent groupings in
 ![alt text](<figures/tsne per peak colored after cell lineage readme.png>)
 Open chromatin regions (peaks) cluster by dominant lineage, showing that regulatory elements are selectively accessible in lineage-specific contexts.
 
-![alt text](<figures/UMAP gene expression leiden clustering readme.png>)
-Transcriptional profiles cluster according to known lineages and largely match ATAC-based clusters, reinforcing the correspondence between chromatin accessibility and gene expression programs.
+
+
 
 ## Discussion
-chatg:
-----
-A typical scientific Discussion should:
-Restate Major Findings
-    Brief summary of the most important results and what they mean.
-Interpretation
-    How do these findings advance understanding of immune cell regulation?
-    Compare to existing knowledge/literature.
-Strengths and Limitations
-    What is especially novel or robust?
-        Are there any technical, data, or methodological limitations?
-Implications/Applications
-    How could these findings be applied in medicine or future research?
-    Any potential for drug development, disease modeling, etc.?
-Future Directions
-    What would be the next steps for analysis?
-    Further experiments, other datasets, functional validation?
-
-- Summary of main results (What did you find regarding CREs, cell type clustering, relation to gene expression?)
-- Biological interpretation (How does this relate to what is known? Did you discover novel CREs, unexpected clusters, or regulatory logic?)
-- Technical strengths and caveats (Data integration, quality, computational methods, etc.)
-Translational/medical relevance (How might these results impact biomarker discovery, therapy, etc.?)
-- Recommendations for future work (What analyses or experiments would you add?)
-----
+Key Findings:
+Limitations:
+Outlook:
+Across 90 immune cell types, chromatin accessibility patterns reveal lineage relationships and can explain translational regulation.
+CREs show diverse regulatory behaviors, including both one-to-one and multifunctional gene associations.
+In aß and yo T cells, specific CREs explain high expression variance and mark subset-specific regulatory programs.
+some variance remains unexpalined, likely due to complex or distal regulation.
+Incooperating TF motif enrichment or proteomics may refine the definition of CRE and gene expression.
+public
