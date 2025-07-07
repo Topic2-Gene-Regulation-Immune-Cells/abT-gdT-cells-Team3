@@ -1,0 +1,6 @@
+GeneName,PeakIDs,LineageCoefs
+gene1,"['peak1', 'peak2', 'peak3', 'peak4', 'peak5']",[-0.         -0.          0.13072055  0.17971003 -0.10099217]
+gene2,"['peak1', 'peak2', 'peak3', 'peak4', 'peak5']","[ 0.00000000e+00  0.00000000e+00 -0.00000000e+00 -0.00000000e+00
+  9.25185854e-18]"
+gene3,"['peak1', 'peak2', 'peak3', 'peak4', 'peak5']",[-0.  0. -0.  0.  0.]
+gene4,"['peak1', 'peak2', 'peak3', 'peak4', 'peak5']",[ 0.  0.  0. -0. -0.]
