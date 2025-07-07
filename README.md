@@ -123,17 +123,11 @@ lineage specific cres:
     - rna data: correlation of leiden clusters with cell type
 
 
-    ![alt text](<figures/umap atac with lineage, pre t highlighted readme.png>)
+
+Results 3. 
+
+![alt text](<figures/umap atac with lineage, pre t highlighted readme.png>)
 Cell types form distinct clusters in UMAP space that largely correspond to known lineages, with preT cells bridging stem/progenitor and mature T cell populations, indicating a smooth transition in chromatin accessibility during differentiation.
-
-![alt text](<figures/atac heatmap abgt readme.png>)
-Clustering of chromatin accessibility peaks reveals lineage-specific accessibility patterns that distinguish abT from gdT and preT cells, suggesting regulatory divergence within the T lineage.
-
-![alt text](<figures/atac heatmap readme.png>)
-ATAC peaks cluster by cell lineage, but also reveal shared accessibility between developmental intermediates (e.g., preT) and mature lineages, indicating gradual chromatin remodeling across differentiation.
-
-![alt text](<figures/cluster vs lineage readme.png>)
-Most k-means clusters are enriched for single lineages, confirming that unsupervised clustering of chromatin signals recapitulates biologically defined cell identities.
 
 ![alt text](<figures/dendogram lineage colored cell type readme.png>)
 Hierarchical clustering of ATAC-seq profiles shows lineage-concordant grouping, with clear separation of B, T, myeloid, and progenitor cells, reflecting known hematopoietic hierarchies.
@@ -159,14 +153,17 @@ Leiden clustering overlays neatly onto the UMAP-defined structure, highlighting 
 ![alt text](<figures/spearman between cell types lineage readme.png>)
 Correlation analysis based on chromatin signal shows that cell types cluster according to lineage, with strong internal coherence and biologically plausible relationships between related lineages like abT, gdT, and T.act.
 
+![alt text](<figures/atac heatmap abgt readme.png>)
+Clustering of chromatin accessibility peaks reveals lineage-specific accessibility patterns that distinguish abT from gdT and preT cells, suggesting regulatory divergence within the T lineage.
+
+![alt text](<figures/atac heatmap readme.png>)
+ATAC peaks cluster by cell lineage, but also reveal shared accessibility between developmental intermediates (e.g., preT) and mature lineages, indicating gradual chromatin remodeling across differentiation.
+
 ![alt text](<figures/tsne lineage leiden clusters readme.png>)
 Both lineage-based and Leiden-based clustering show clear, coherent groupings in t-SNE space, with substantial concordance between transcriptional identity and unsupervised chromatin structure.
 
 ![alt text](<figures/tsne per peak colored after cell lineage readme.png>)
 Open chromatin regions (peaks) cluster by dominant lineage, showing that regulatory elements are selectively accessible in lineage-specific contexts.
-
-![alt text](<figures/umap atac with lineage, pre t highlighted readme.png>)
-Chromatin accessibility in preT cells bridges early progenitors and mature T cells in UMAP space, supporting a developmental trajectory of increasing lineage specification.
 
 ![alt text](<figures/UMAP gene expression leiden clustering readme.png>)
 Transcriptional profiles cluster according to known lineages and largely match ATAC-based clusters, reinforcing the correspondence between chromatin accessibility and gene expression programs.
