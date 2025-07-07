@@ -169,12 +169,24 @@ Open chromatin regions (peaks) cluster by dominant lineage, showing that regulat
 
 
 ## Discussion
+
+
+
 Key Findings:
-Limitations:
-Outlook:
+
 Across 90 immune cell types, chromatin accessibility patterns reveal lineage relationships and can explain translational regulation.
 CREs show diverse regulatory behaviors, including both one-to-one and multifunctional gene associations.
 In aß and yo T cells, specific CREs explain high expression variance and mark subset-specific regulatory programs.
+
+
+
+Limitations:
+
 some variance remains unexpalined, likely due to complex or distal regulation.
+
+
+
+Outlook:
+
 Incooperating TF motif enrichment or proteomics may refine the definition of CRE and gene expression.
 public
