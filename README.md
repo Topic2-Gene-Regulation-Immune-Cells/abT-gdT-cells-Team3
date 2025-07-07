@@ -28,26 +28,25 @@ The project can be divided to a few key aspects:
 
 Further investigating the data, we can define more detailed questions according to the guideline we were given:
 1. Characterization of the chromatin landscape
-1.1 how variable is the chromatin signal within and across cells? (1.i.a, 1.ii: nur descriptive plots)
-1.2 should some peaks or cell types be removed due to technical issues (quality control) or lack of signal? (1.i.b, 1.ii.a)
-1.3 should we apply additional normalization or thresholds? (hexbins?, 1.i.b)
+1.1 How variable is the chromatin signal within and across cells? (1.i.a, 1.ii: nur descriptive plots)
+1.2 Should some peaks or cell types be removed due to technical issues (quality control) or lack of signal? Should we apply additional normalization or thresholds? (1.i.b, 1.ii.a)
 
-2. Identify and classify CREs
+2. Identification and classification of CREs
 2.1 How do we define (CREs) ? / Promoter/Enhancer and other descriptive categories? (1.ii. allgemein)
 2.2 Does the signal vary significantly between Promoter and Enhancer? (1.ii.b)
 2.3 Are CREs related to TSS distance and how are they located? (2.iii.a)
 2.4 How are CREs associated with genes? (2.iii.b,c,d,e,f, 2.iv.a,b)
 2.5 Are there multifunctional CREs or other irregularities? (2.iii.g)
 2.6 Which CREs control ab and gd T cell lineage specific genes?
-2.7 How do we characterize acivating and repressing genes/CREs?? (1.ii, 2.iv.e,f,g,h (&comparison w/ and w/o regression!))
+2.7 How do we characterize acivating and repressing CREs? (1.ii, 2.iv.e,f,g,h (&comparison w/ and w/o regression!))
 
-3. Identify clusters of chromatin signal / gene expression and look for (known) relations
+3. Identifcation of clusters of chromatin signal / gene expression and finding (known) relations
 3.1 How do cell types cluster based on OCR and based on gene expression? (1.iii.,b; 2,ii; 2.i)
     3.1.1 Do they reproduce known relationship between cells and between OCR and gene expression? (1.iii.a, 2.i, 2.ii.a,(b))
 3.2 How do peaks (ATAC) cluster together? (1.iv.a,b)
     3.2.1 (How) do they differ from cell lineage specific clusters? (1.iv.c,d)
 3.3 Does the clustering change in respect to effect direciton on gene expression? (2.iv.i)
-3.4 Do CREs show specific properties within clusters
+3.4 Do CREs show specific properties within clusters?
 
 
 ## Dataset and Methods
@@ -72,6 +71,27 @@ Code development and troubleshooting were assisted of AI-based tools such as Cha
 ![alt text](figures/QC_ATAC_corr.png)
 
 -> QC, normalization, thresholding
+
+2. Identify and characterize CREs 
+- R2 distribution accross cells histogramm
+
+
+lineage specific cres:
+- coeff shift plot
+- plot top genes all vs lineage
+- top abgd cres r2 score
+- histograms showing top cres for ab, gd and abgd
+- r2 variance as comparison
+- lasso coeff for scd2
+
+
+3. Identify clusters of chromatin signal / gene expression and look for (known) relations
+
+- umap rna & umap ATAC
+- correlation of rna/atac umap
+- hierarichal clustering of atac vs gene expression data
+
+    - rna data: correlation of leiden clusters with cell type
 
 
 ## Discussion
