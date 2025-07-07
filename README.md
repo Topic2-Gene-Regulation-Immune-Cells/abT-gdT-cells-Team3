@@ -38,7 +38,7 @@ Further investigating the data, we can define more detailed questions according 
 2.4 How are CREs associated with genes? (2.iii.b,c,d,e,f, 2.iv.a,b)
 2.5 Are there multifunctional CREs or other irregularities? (2.iii.g)
 2.6 Which CREs control ab and gd T cell lineage specific genes?
-2.7 How do we characterize acivating and repressing genes/CREs?? (1.ii, 2.iv.e,f,g,h (&comparison w/ and w/o regression!))
+2.7 How do we characterize acivating and repressing CREs? (1.ii, 2.iv.e,f,g,h (&comparison w/ and w/o regression!))
 
 3. Identifcation of clusters of chromatin signal / gene expression and finding (known) relations
 3.1 How do cell types cluster based on OCR and based on gene expression? (1.iii.,b; 2,ii; 2.i)
@@ -46,7 +46,7 @@ Further investigating the data, we can define more detailed questions according 
 3.2 How do peaks (ATAC) cluster together? (1.iv.a,b)
     3.2.1 (How) do they differ from cell lineage specific clusters? (1.iv.c,d)
 3.3 Does the clustering change in respect to effect direciton on gene expression? (2.iv.i)
-3.4 Do CREs show specific properties within clusters
+3.4 Do CREs show specific properties within clusters?
 
 
 ## Dataset and Methods
