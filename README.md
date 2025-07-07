@@ -36,7 +36,7 @@ Further investigating the data, we can define more detailed questions according 
 2.2 Does the signal vary significantly between Promoter and Enhancer? (1.ii.b)
 2.3 Are CREs related to TSS distance and how are they located? (2.iii.a(da))
 2.4 How are CREs associated with genes? (2.iii.b,c,d,e,f(da), 2.iv.a,b)
-2.5 Are there multifunctional CREs or other irregularities? (2.iii.g)
+2.5 Are there multifunctional CREs or other irregularities? (2.iii.g(da))
 2.6 Which CREs control ab and gd T cell lineage specific genes?
 2.7 How do we characterize acivating and repressing CREs? (1.ii, 2.iv.e,f,g,h (&comparison w/ and w/o regression!))
 
