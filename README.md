@@ -63,16 +63,45 @@ For exploring and analzing the data, we focus on covering these points:
 We established a file "functions.py", in which defined functions can be saved to establish an integrating workflow for the team.
 Code development and troubleshooting were assisted by AI-based tools such as ChatGPT.
 
+Raw data sets:
+
+[ATAC](https://sharehost.hms.harvard.edu/immgen/ImmGenATAC18_AllOCRsInfo.csv)
+[RNA](https://www.cell.com/cms/10.1016/j.cell.2018.12.036/attachment/4392da81-c56e-471a-b1df-0e72f03ecd77/mmc2.csv)
+[QC](https://www.cell.com/cms/10.1016/j.cell.2018.12.036/attachment/e5df7329-d77d-40b3-a03a-34bdbe4b402c/mmc1.xlsx)
+[exon/TSS loc](http://hgdownload.cse.ucsc.edu/goldenPath/mm10/database/refFlat.txt.gz)
+The columns in this file are: Gene Name , Transcript Name, Chromosome, Strand, 5' transcript Start, 3' Transcript Start, Coding Region 5' Start, Coding Region 3' Start, Exon Count, Exon Starts, Exon Ends
+
 
 ## Results
 
 1. Characterize the chromatin landscape
-![alt text](figures/mean_tss_boxplot.png)
-![alt text](figures/QC_ATAC_corr.png)
+![alt text](figures/variance_cell_types.png)
+The variability of chromatin signals across immune cell types is generally high, indicating diverse regulatory activity. Some cell types exhibit lower variability, possibly due to biological uniformity or technical factors.
 
--> QC, normalization, thresholding
+![alt text](figures/hexbin_var_range_mean.png)
+An inverse relationship between mean chromatin accessibility and variability indicates that high-signal regions tend to be broadly accessible (constitutive), whereas moderate signals correspond to more specialized, cell type-specific regions. Peaks with low variability and range may represent inactive or uniformly accessible chromatin.
+
 
 2. Identify and characterize CREs 
+![alt text](figures/mean_tss_boxplot.png)
+Chromatin accessibility is highest near transcription start sites (TSS), strongly suggesting promoter regions. Accessibility significantly decreases with increased distance, indicating distal regions likely represent enhancers.
+
+![alt text](figures/tss_dis_mean_lowess.png)
+Accessibility rapidly declines with increased distance from the TSS, highlighting that regulatory elements close to gene promoters are most actively accessible, while distal regions show lower but biologically relevant accessibility, characteristic of enhancers.
+
+![alt text](figures/prom_vs_enhancer_mean.png)
+Promoters exhibit significantly higher chromatin accessibility than enhancers, consistent with their role in constitutive gene regulation. Enhancers show lower and more variable accessibility reflecting their context-specific regulatory roles.
+
+![alt text](figures/volcano_corr_sig.png)
+Many CRE-gene pairs show strong, significant positive correlations, underscoring a robust relationship between chromatin accessibility and gene expression. The presence of highly significant CRE-gene associations indicates active regulatory interactions.
+
+![alt text](figures/acc_CRE_tss.png)
+Most strongly correlated CREs cluster near the TSS, affirming proximal regulation. Nonetheless, distal CREs also show strong correlations, emphasizing long-range regulatory mechanisms within the genome.
+
+![alt text](figures/multifunctional_CREs.png)
+Most CREs regulate only a few genes, indicating specific regulatory roles. However, a subset of CREs regulates multiple genes, highlighting potential multifunctionality and complex regulatory networks in immune cells.
+
+
 - R2 distribution accross cells histogramm
 
 
